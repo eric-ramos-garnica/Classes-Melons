@@ -1,3 +1,7 @@
+import random
+import datetime
+
+
 """Classes for melon orders."""
 class AbstractMelonOrder:
     tax = None
@@ -8,12 +12,28 @@ class AbstractMelonOrder:
         self.species = species
         self.qty = qty
         self.country_code = country_code
-        
+
     
+  
+    def get_base_price(self):
+        now = datetime.datetime.now()
+        weekday = now.isoweekday()
+        hour = now.hour
+        base_price = random.randint(5, 9)
+        # print(base_price)
+        
+        if weekday <= 5 and hour >= 8 and hour < 11:
+            base_price += self.qty * 4
+            return base_price
+        else:
+            return base_price
+           
+
+   
     def get_total(self):
         """Calculate price, including tax."""
-
-        base_price = 5
+        base_price = self.get_base_price()
+        print(base_price)
 
         if self.species == "Christmas Melon":
             base_price *= 1.5
@@ -62,5 +82,13 @@ class GovernmentMelonOrder(AbstractMelonOrder):
         self.passed_inspection = True
 
 
+obj9 = GovernmentMelonOrder('Christmas Melon',105)
 
-obj9 = GovernmentMelonOrder('Christmas Melon',10)
+
+
+# class TooManyMelonsError(ValueError,AbstractMelonOrder):
+    
+#     if AbstractMelonOrder.qty > 100:
+#         raise TooManyMelonsError
+    
+
